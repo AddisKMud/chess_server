@@ -5,10 +5,10 @@ local max_client = 64
 
 skynet.start(function()
 	skynet.error("Server start")
-	if not skynet.getenv "daemon" then
-		local console = skynet.newservice("console")
-	end
+
+	skynet.newservice("console")
 	skynet.newservice("debug_console",8000)
+
 	local watchdog = skynet.newservice("watchdog")
 	skynet.call(watchdog, "lua", "start", {
 		port = 8888,
@@ -16,9 +16,9 @@ skynet.start(function()
 		nodelay = true,
 	})
 	skynet.error("Watchdog listen on", 8888)
-	
+
 	local service = skynet.newservice("pbc")
-	
+
 	local msg = {account = "haha", token = "hehe"}
 	local data = skynet.call(service, "lua", "encode", "Login.Login", msg)
 	local de_msg = skynet.call(service, "lua", "decode", "Login.Login", data)
