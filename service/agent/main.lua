@@ -1,8 +1,8 @@
 local skynet = require "skynet"
 local netpack = require "netpack"
 local socket = require "socket"
-local sproto = require "sproto"
-local sprotoloader = require "sprotoloader"
+local sock_dispatch = require "sock_dispatch"
+local protopack = require "protopack"
 
 local WATCHDOG
 local send_request
@@ -19,11 +19,13 @@ end
 skynet.register_protocol {
 	name = "client",
 	id = skynet.PTYPE_CLIENT,
-	unpack = function (msg, sz)
-		return "data", netpack.tostring(msg, sz)
+	unpack = function (data, sz)
+		local data_str = netpack.tostring(data, sz)
+		local name, msg = protopack.unpack(data_str)
+		return name, msg
 	end,
-	dispatch = function (_, _, type, str)
-		print(type, str)
+	dispatch = function (_, _, name, msg)
+		sock_dispatch:dispatch(name, msg)	
 	end
 }
 
