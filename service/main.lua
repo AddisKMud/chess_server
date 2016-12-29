@@ -25,5 +25,8 @@ skynet.start(function()
 	utils.print(msg)
 	utils.print(de_msg)
 
+	service = skynet.newservice("mongodb")
+	skynet.send(service, "lua", "init")
+
 	skynet.exit()
 end)
