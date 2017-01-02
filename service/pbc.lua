@@ -20,6 +20,8 @@ function cmd.encode(msg_name, msg)
 end
 
 function cmd.decode(msg_name, data)
+	skynet.error("decode ".. msg_name.. " " .. type(data) .." " .. #data)
+	utils.hex(data)
 	return protobuf.decode(msg_name, data)
 end
 
@@ -44,12 +46,15 @@ skynet.start(function ()
 			skynet.ret(skynet.pack(nil, "Invalid command" .. command))
 		end
 
-		local ok, ret = pcall(f, ...)
-		if ok then
-			skynet.ret(skynet.pack(ret))
-		else
-			skynet.ret(skynet.pack(nil, ret))
+		if command == "decode" then
+			local name
+			local buf
+			name,buf = ...
+			skynet.ret(skynet.pack(cmd.decode(name,buf)))
+			return
 		end
+		local ret = f(...)
+			skynet.ret(skynet.pack(ret))
 	end)
 
 	skynet.register("pbc")

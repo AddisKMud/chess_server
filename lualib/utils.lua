@@ -40,4 +40,14 @@ function M.print(...)
 	skynet.error(table.concat(ret, ", "))
 end
 
+function M.hex(str)
+	local len = #str
+	local ret = ""
+	for i=1,len do
+		local c = tonumber(string.byte(str,i,i))
+		ret = ret .. string.format("%02X ", c)
+	end
+	skynet.error(ret)
+end
+
 return M

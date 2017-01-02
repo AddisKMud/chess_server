@@ -19,12 +19,20 @@ skynet.start(function()
 
 	local service = skynet.newservice("pbc")
 
-	local msg = {account = "haha", token = "hehe"}
+	local msg = {account = "aa", token = "aa"}
 	local data = skynet.call(service, "lua", "encode", "Login.Login", msg)
+	
 	local de_msg = skynet.call(service, "lua", "decode", "Login.Login", data)
 	utils.print(msg)
 	utils.print(de_msg)
 
+
+	data = skynet.call(service, "lua", "encode", "Login.Login", {account="aa",token="bb"})
+	de_msg = skynet.call(service, "lua", "decode", "Login.Login", data)
+	
+	data = skynet.call(service, "lua", "encode", "Login.Login", {account="aa",token="bbb"})
+	de_msg = skynet.call(service, "lua", "decode", "Login.Login", data)
+	
 	service = skynet.newservice("mongodb")
 	skynet.send(service, "lua", "init")
 
