@@ -44,8 +44,11 @@ function M.hex(str)
 	local len = #str
 	local ret = ""
 	for i=1,len do
-		local c = tonumber(string.byte(str,i,i))
-		ret = ret .. string.format("%02X ", c)
+		local c = tonumber(str:byte(i))
+		print("c",c)
+		local cstr = string.format("%02X ", c)
+		print(cstr)
+		ret = ret .. cstr
 	end
 	skynet.error(ret)
 end

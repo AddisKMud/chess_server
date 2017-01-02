@@ -27,12 +27,10 @@ skynet.register_protocol {
 	name = "client",
 	id = skynet.PTYPE_CLIENT,
 	unpack = function (data, sz)
-		return data, sz
+		return skynet.tostring(data,sz)
 	end,
-	dispatch = function (_, _, data, sz)
-		local data_str = netpack.tostring(data, sz)
-		local name, msg = protopack.unpack(data_str)
-		socket.write(client_fd, string.pack(">s2",data_str))
+	dispatch = function (_, _, str)
+		local name, msg = protopack.unpack(str)
 		sock_dispatch:dispatch(name, msg)	
 	end
 }
