@@ -1,6 +1,6 @@
 local skynet = require "skynet"
 local socket = require "socket"
-local sock_dispatch = require "sock_dispatch"
+local dispatcher = require "sock_dispatch"
 local protopack = require "protopack"
 local login = require "login"
 local env = require "env"
@@ -12,6 +12,9 @@ env.send_msg = function (name, msg)
 	socket.write(CONF.fd, data)
 end
 
+local sock_dispatcher = dispatcher.new()
+env.dispatcher = sock_dispatcher
+
 skynet.register_protocol {
 	name = "client",
 	id = skynet.PTYPE_CLIENT,
@@ -20,7 +23,7 @@ skynet.register_protocol {
 	end,
 	dispatch = function (_, _, str)
 		local name, msg = protopack.unpack(str)
-		sock_dispatch:dispatch(name, msg)
+		sock_dispatcher:dispatch(name, msg)
 	end
 }
 

@@ -1,8 +1,14 @@
 local skynet = require "skynet"
 
-local M = {
-	map = {}
-}
+local M = {}
+
+M.__index = M
+
+function M.new()
+	local o = {map = {}}
+	setmetatable(o, M)
+	return o
+end
 
 function M:register(name, f, obj)
 	self.map[name] = {f = f, obj = obj}
