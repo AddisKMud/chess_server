@@ -1,26 +1,15 @@
 local skynet = require "skynet"
-local netpack = require "netpack"
 local socket = require "socket"
 local sock_dispatch = require "sock_dispatch"
 local protopack = require "protopack"
 local login = require "login"
+local env = require "env"
 
-local WATCHDOG
-local send_request
+local CONF
 
-local CMD = {}
-local REQUEST = {}
-local client_fd
-
-function send_msg(name, msg)
+env.send_msg = function (name, msg)
 	local data = protopack.pack(name, msg)
-	print("send", #data)
-	socket.write(client_fd, data)
-end
-
-local function send_package(pack)
-	local package = string.pack(">s2", pack)
-	socket.write(client_fd, package)
+	socket.write(CONF.fd, data)
 end
 
 skynet.register_protocol {
@@ -31,18 +20,16 @@ skynet.register_protocol {
 	end,
 	dispatch = function (_, _, str)
 		local name, msg = protopack.unpack(str)
-		sock_dispatch:dispatch(name, msg)	
+		sock_dispatch:dispatch(name, msg)
 	end
 }
 
-function CMD.start(conf)
-	local fd = conf.client
-	local gate = conf.gate
-	WATCHDOG = conf.watchdog
-	client_fd = fd
-	skynet.call(gate, "lua", "forward", fd)
+local CMD = {}
 
+function CMD.start(conf)
+	CONF = conf
 	login.register()
+	skynet.call(conf.gate, "lua", "forward", conf.fd)
 end
 
 function CMD.disconnect()

@@ -1,20 +1,37 @@
 local skynet = require "skynet"
-local netpack = require "netpack"
+local log = require "log"
+local protopack = require "protopack"
+local socket = require "socket"
 
-local CMD = {}
-local SOCKET = {}
 local gate
-local agent = {}
+local SOCKET = {}
+local agents = {}
 
+---------------------------socket数据处理----------------------------
+local sock_handler = {}
+
+sock_handler["Login.LoginReq"] = function (fd, msg)
+	log.log("verify account %s", msg.account)
+
+	-- 校验用户名密码、获取token
+	local token = "111"
+
+	SOCKET.send(fd, "Login.LoginRsp", {account = msg.account, token = token})
+
+	agents[fd] = skynet.newservice("agent")
+	skynet.call(agents[fd], "lua", "start", {gate = gate,
+		client = fd, watchdog = skynet.self(), account = msg.account})
+end
+
+------------------------ socket消息开始 -----------------------------
 function SOCKET.open(fd, addr)
-	skynet.error("New client from : " .. addr)
-	agent[fd] = skynet.newservice("agent")
-	skynet.call(agent[fd], "lua", "start", { gate = gate, client = fd, watchdog = skynet.self() })
+	log.log("New client from : %s", addr)
+	skynet.accept(fd)
 end
 
 local function close_agent(fd)
-	local a = agent[fd]
-	agent[fd] = nil
+	local a = agents[fd]
+	agents[fd] = nil
 	if a then
 		skynet.call(gate, "lua", "kick", fd)
 		-- disconnect never return
@@ -23,23 +40,33 @@ local function close_agent(fd)
 end
 
 function SOCKET.close(fd)
-	print("socket close",fd)
+	log.log("socket close fd=%d", fd)
 	close_agent(fd)
 end
 
 function SOCKET.error(fd, msg)
-	print("socket error",fd, msg)
+	log.log("socket error fd = %d msg=%s", fd, msg)
 	close_agent(fd)
 end
 
 function SOCKET.warning(fd, size)
 	-- size K bytes havn't send out in fd
-	print("socket warning", fd, size)
+	log.log("socket warning fd=%d size=%d", fd, size)
 end
 
-function SOCKET.data(fd, msg)
+function SOCKET.data(fd, data)
+	local name, msg = protopack.unpack(data)
+	sock_handler[name](fd, msg)
 end
 
+function SOCKET.send(fd, name, msg)
+	local data = protopack.pack(name, msg)
+	socket.write(fd, data)
+end
+
+------------------------ socket消息结束-----------------------------
+
+local CMD = {}
 function CMD.start(conf)
 	skynet.call(gate, "lua", "open" , conf)
 end
@@ -49,7 +76,7 @@ function CMD.close(fd)
 end
 
 skynet.start(function()
-	skynet.dispatch("lua", function(session, source, cmd, subcmd, ...)
+	skynet.dispatch("lua", function(_, _, cmd, subcmd, ...)
 		if cmd == "socket" then
 			local f = SOCKET[subcmd]
 			f(...)
