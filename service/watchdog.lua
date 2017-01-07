@@ -11,7 +11,6 @@ local agents = {}
 local sock_handler = {}
 
 sock_handler["Login.LoginReq"] = function (fd, msg)
-	log.log("verify account %s", msg.account)
 
 	-- 校验用户名密码、获取token
 	local token = "111"
@@ -20,13 +19,15 @@ sock_handler["Login.LoginReq"] = function (fd, msg)
 
 	agents[fd] = skynet.newservice("agent")
 	skynet.call(agents[fd], "lua", "start", {gate = gate,
-		client = fd, watchdog = skynet.self(), account = msg.account})
+		fd = fd, watchdog = skynet.self(), account = msg.account})
+	
+	log.log("verify account %s success!", msg.account)
 end
 
 ------------------------ socket消息开始 -----------------------------
 function SOCKET.open(fd, addr)
 	log.log("New client from : %s", addr)
-	skynet.accept(fd)
+	skynet.call(gate, "lua", "accept", fd)
 end
 
 local function close_agent(fd)

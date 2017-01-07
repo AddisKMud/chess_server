@@ -1,5 +1,3 @@
-local skynet = require "skynet"
-
 local M = {}
 
 local function serialize(obj)
@@ -25,8 +23,10 @@ local function serialize(obj)
         lua = lua .. "}"  
     elseif t == "nil" then  
         return "nil"  
-    else  
-        error("can not serialize a " .. t .. " type.")  
+    elseif t == "userdata" then
+		return "userdata"
+	else  
+        error("can not serialize a " .. t .. " type.")
     end  
     return lua
 end
@@ -37,7 +37,19 @@ function M.print(...)
 	for _,v in pairs(t) do
 		table.insert(ret, serialize(v))
 	end
-	skynet.error(table.concat(ret, ", "))
+	print(table.concat(ret, ", "))
+end
+
+function M.split(str, delimiter)
+	if str==nil or str=='' or delimiter==nil then
+		return nil
+	end
+	
+    local result = {}
+    for match in (str..delimiter):gmatch("(.-)"..delimiter) do
+        table.insert(result, match)
+    end
+    return result
 end
 
 function M.hex(str)
@@ -45,12 +57,10 @@ function M.hex(str)
 	local ret = ""
 	for i=1,len do
 		local c = tonumber(str:byte(i))
-		print("c",c)
 		local cstr = string.format("%02X ", c)
-		print(cstr)
 		ret = ret .. cstr
 	end
-	skynet.error(ret)
+	print(ret)
 end
 
 return M
