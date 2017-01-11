@@ -57,6 +57,7 @@ end
 
 function SOCKET.data(fd, data)
 	local name, msg = protopack.unpack(data)
+	print(name)
 	sock_handler[name](fd, msg)
 end
 

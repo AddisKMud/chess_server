@@ -1,8 +1,8 @@
 local skynet = require "skynet"
 local socket = require "socket"
-local dispatcher = require "sock_dispatch"
+local dispatcher = require "dispatcher"
 local protopack = require "protopack"
-local login = require "login"
+local login = require "handler.login"
 local env = require "env"
 
 local CONF
@@ -19,6 +19,7 @@ skynet.register_protocol {
 	name = "client",
 	id = skynet.PTYPE_CLIENT,
 	unpack = function (data, sz)
+		print("agent recv socket data",sz)
 		return skynet.tostring(data,sz)
 	end,
 	dispatch = function (_, _, str)
@@ -31,6 +32,7 @@ local CMD = {}
 
 function CMD.start(conf)
 	CONF = conf
+	env.account = conf.account
 	login.register()
 	skynet.call(conf.gate, "lua", "forward", conf.fd)
 end

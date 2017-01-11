@@ -25,6 +25,8 @@ local function serialize(obj)
         return "nil"  
     elseif t == "userdata" then
 		return "userdata"
+	elseif t == "function" then
+		return "function"
 	else  
         error("can not serialize a " .. t .. " type.")
     end  

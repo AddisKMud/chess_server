@@ -4,7 +4,9 @@ local utils = require "utils"
 local protobuf = require "protobuf"
 
 local pb_files = {
-	"./proto/login.pb"
+	"./proto/login.pb",
+	"./proto/room.pb",
+	"./proto/table.pb"
 }
 
 local cmd = {}
@@ -21,7 +23,6 @@ end
 
 function cmd.decode(msg_name, data)
 	skynet.error("decode ".. msg_name.. " " .. type(data) .." " .. #data)
-	utils.hex(data)
 	return protobuf.decode(msg_name, data)
 end
 

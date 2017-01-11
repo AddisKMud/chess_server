@@ -22,5 +22,8 @@ skynet.start(function()
 	service = skynet.newservice("mongodb")
 	skynet.send(service, "lua", "init")
 
+	service = skynet.newservice("hall")
+	skynet.call(service, "lua", "start")
+
 	skynet.exit()
 end)
