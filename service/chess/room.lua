@@ -24,12 +24,18 @@ function M:init(id)
 	end
 end
 
-function M:enter()
+function M:enter(info)
+	local old = self.players[info.id]
+    if old then
+		return false
+	end
 
+	self.players[info.id] = info
+	return true
 end
 
-function M:leave()
-
+function M:leave(id)
+	self.players[id] = nil
 end
 
 return M

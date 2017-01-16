@@ -13,6 +13,18 @@ function CMD.start(conf)
 	return true
 end
 
+function CMD.enter(info)
+	if Env.room:enter(info) then
+		return true
+	else
+		return false
+	end
+end
+
+function CMD.leave(id)
+	Env.room:leave(id)
+end
+
 skynet.start(function ()
 	skynet.dispatch("lua", function (_, _, cmd, ...)
 		local f = CMD[cmd]

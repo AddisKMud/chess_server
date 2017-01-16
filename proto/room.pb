@@ -1,15 +1,14 @@
 
-ä
-proto/room.protoroom"1
-Room
+ì
+proto/room.protoRoom"5
+RoomInfo
 
 id (
 game (	
 service ("
-RoomListReq"'
-RoomListRsp
-list (2
-.room.Room"
+RoomListReq"+
+RoomListRsp
+list (2.Room.RoomInfo"
 EnterReq
 room_id ("
 EnterRsp

@@ -3,7 +3,9 @@ local socket = require "socket"
 local dispatcher = require "dispatcher"
 local protopack = require "protopack"
 local login = require "handler.login"
+local room = require "handler.room"
 local env = require "env"
+local player = require "player"
 
 local CONF
 
@@ -33,7 +35,9 @@ local CMD = {}
 function CMD.start(conf)
 	CONF = conf
 	env.account = conf.account
+	player:load()
 	login.register()
+	room.register()
 	skynet.call(conf.gate, "lua", "forward", conf.fd)
 end
 

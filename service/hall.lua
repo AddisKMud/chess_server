@@ -1,4 +1,5 @@
 local skynet = require "skynet"
+require "skynet.manager"
 local log = require "log"
 
 local rooms = {}
@@ -23,6 +24,15 @@ function CMD.list()
 	return rooms
 end
 
+function CMD.info(room_id)
+	local info = rooms[room_id]
+	if not info then
+		return false
+	end
+
+	return info
+end
+
 skynet.start(function ()
 	skynet.dispatch("lua", function (_, _, cmd, ...)
 		local f = CMD[cmd]
@@ -32,4 +42,5 @@ skynet.start(function ()
 			skynet.ret(skynet.pack(nil, "cant find handle of "..cmd))
 		end
 	end)
+	skynet.register("hall")
 end)

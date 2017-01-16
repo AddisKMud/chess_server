@@ -1,6 +1,6 @@
-package room;
+package Room;
 
-message Room
+message RoomInfo
 {
 	required int32 id = 1;
 	required string game = 2;
@@ -14,7 +14,7 @@ message RoomListReq
 
 message RoomListRsp
 {
-	repeated Room list = 1;
+	repeated RoomInfo list = 1;
 }
 
 message EnterReq

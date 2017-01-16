@@ -1,3 +1,4 @@
+local skynet = require "skynet"
 
 local Player = {}
 
@@ -11,8 +12,10 @@ end
 
 -- 数据库加载玩家数据
 function Player:load(account)
+	self.id = skynet.self()
 	self.account = account
 	self.name = "哈哈哈"
+	self.agent = skynet.self()
 end
 
 return Player
