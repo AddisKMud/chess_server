@@ -3,17 +3,28 @@ package room;
 message Room
 {
 	required int32 id = 1;
-	required int32 
+	required string game = 2;
+	required int32 service = 3; 
+}
+
+message RoomListReq
+{
+	
+}
+
+message RoomListRsp
+{
+	repeated Room list = 1;
 }
 
 message EnterReq
 {
-	required int32 room_id = 0;	
+	required int32 room_id = 1;	
 }
 
 message EnterRsp
 {
-	required int32 err_no = 0;
+	required int32 err_no = 1;
 }
 
 message LeaveReq
@@ -23,5 +34,5 @@ message LeaveReq
 
 message LeaveRsp
 {
-	required int32 err_no = 0;
+	required int32 err_no = 1;
 }

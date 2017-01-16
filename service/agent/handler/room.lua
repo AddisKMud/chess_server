@@ -3,6 +3,13 @@ local player = require "player"
 
 local M = {}
 
+function M.room_list()
+	local list = skynet.call("hall", "lua", "list")
+	if list then
+		env.send_msg("Room.RoomListRsp", list)
+	end
+end
+
 function M.room_msg(msg)
 	if not env.room then
 		return
@@ -15,6 +22,7 @@ function M.room_msg(msg)
 end
 
 function M.register()
+	env.dispatcher:register("Room.RoomListReq", M.room_list)
 	env.dispatcher:register("Room.EnterReq", M.room_msg)
 	env.dispatcher:register("Room.LeaveReq", M.room_msg)
 	env.dispatcher:register("Room.SitdownReq", M.room_msg)
