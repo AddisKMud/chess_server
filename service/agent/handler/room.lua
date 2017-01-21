@@ -26,6 +26,7 @@ function M.enter_room(msg)
 		name=player.name}
 	skynet.call(info.service, "lua", "enter", player_info)
 
+	env.room = info.service
 	env.send_msg("Room.EnterRsp", {err_no = 0})
 end
 
@@ -44,13 +45,6 @@ function M.register()
 	env.dispatcher:register("Room.RoomListReq", M.room_list)
 	env.dispatcher:register("Room.EnterReq", M.enter_room)
 	env.dispatcher:register("Room.LeaveReq", M.room_msg)
-	env.dispatcher:register("Room.SitdownReq", M.room_msg)
-	env.dispatcher:register("Room.StandupReq", M.room_msg)
-	env.dispatcher:register("Table.SitdownReq", M.room_msg)
-	env.dispatcher:register("Table.StandupReq", M.room_msg)
-	env.dispatcher:register("Table.StartReq", M.room_msg)
-	env.dispatcher:register("Table.StartConformReq", M.room_msg)
-	env.dispatcher:register("Table.MoveReq", M.room_msg)
 end
 
 return M

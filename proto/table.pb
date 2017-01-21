@@ -1,21 +1,21 @@
 
-¦
-proto/table.protoTable"+
+¨
+proto/table.protoTable"
 
-SitdownReq
-tab_id (
-index ("
+MatchReq"
+MatchRsp
+err_no ("G
+MatchResult
+i_am_red (
+name (	
 
-SitdownRsp
-err_no ("
+lv (
+icon ("
 
-StandupReq"
+ReadyReq"
 
-StandupRsp
-err_no ("
-
-StartReq"
-StartConformReq"/
+ReadyRsp"
+ReadyNotify"/
 StartNotify
 is_red (
 is_first (">

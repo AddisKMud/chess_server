@@ -18,6 +18,8 @@ function cmd.init()
 end
 
 function cmd.encode(msg_name, msg)
+	skynet.error("encode"..msg_name)
+	utils.print(msg)
 	return protobuf.encode(msg_name, msg)
 end
 

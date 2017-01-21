@@ -4,6 +4,7 @@ local dispatcher = require "dispatcher"
 local protopack = require "protopack"
 local login = require "handler.login"
 local room = require "handler.room"
+local table = require "handler.table"
 local env = require "env"
 local player = require "player"
 
@@ -38,11 +39,16 @@ function CMD.start(conf)
 	player:load()
 	login.register()
 	room.register()
+	table.register()
 	skynet.call(conf.gate, "lua", "forward", conf.fd)
 end
 
 function CMD.disconnect()
 	skynet.exit()
+end
+
+function CMD.send(name, msg)
+	env.send_msg(name, msg)
 end
 
 skynet.start(function()
