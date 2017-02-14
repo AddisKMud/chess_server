@@ -24,8 +24,19 @@ git submodule update
 make linux
 
 4、编译pbc
-cd ../
+
+cd ../3rd/pbc
+make
+cd binding
+cd lua53
+修改一下Makefile文件，设置lua.h的路径
+make
+将protobuf.lua复制到根目录的lualib目录
+protobuf.so文件复制到根目录的luaclib目录
 
 5、编译proto文件
+回到根目录
+make
 
 6、运行
+. run.sh
