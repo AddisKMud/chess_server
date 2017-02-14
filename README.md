@@ -42,7 +42,9 @@ make
 protobuf.so文件复制到根目录的luaclib目录
 
 5、编译proto文件
+
 回到根目录
+
 make
 
 6、运行
