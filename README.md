@@ -10,17 +10,25 @@
 服务器编译步骤:
 
 1、下载源码
+
 git clone https://github.com/yuanfengyun/chess_server.git
 
 2、初始化submodule
+
 cd chess_server
+
 git submodule init
+
 git submodule update
 
 3、编译skynet
+
 cd skynet
+
 git submodule init
+
 git submodule update
+
 make linux
 
 4、编译pbc
