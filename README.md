@@ -11,50 +11,50 @@
 
 1、下载源码
 
-  git clone https://github.com/yuanfengyun/chess_server.git
+    git clone https://github.com/yuanfengyun/chess_server.git
 
 2、初始化submodule
 
-  cd chess_server
+    cd chess_server
 
-  git submodule init
+    git submodule init
 
-  git submodule update
+    git submodule update
 
 3、编译skynet
 
-  cd skynet
+    cd skynet
 
-  git submodule init
+    git submodule init
 
-  git submodule update
+    git submodule update
 
-  make linux
+    make linux
 
 4、编译pbc
 
-  cd ../3rd/pbc
+    cd ../3rd/pbc
 
-  make
+    make
 
-  cd binding
+    cd binding
 
-  cd lua53
+    cd lua53
 
-  修改一下Makefile文件，设置lua.h的路径
+    修改一下Makefile文件，设置lua.h的路径
 
-  make
+    make
 
-  将protobuf.lua复制到根目录的lualib目录
+    将protobuf.lua复制到根目录的lualib目录
 
-  protobuf.so文件复制到根目录的luaclib目录
+    protobuf.so文件复制到根目录的luaclib目录
 
 5、编译proto文件
 
-  回到根目录
+    回到根目录
 
-  make
+    make
 
 6、运行
 
-  . run.sh
+    . run.sh
