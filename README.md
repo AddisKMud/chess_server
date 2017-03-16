@@ -7,6 +7,8 @@
 
 客户端代码地址: https://github.com/yuanfengyun/chess
 
+房卡类的麻将服务器地址：https://github.com/yuanfengyun/mj_server
+
 服务器编译步骤:
 
 1、下载源码
