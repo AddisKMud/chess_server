@@ -1,4 +1,7 @@
 # open_poker_server
+
+skynet视频课程QQ群：805696011
+
 开源棋牌服务器框架，使用skynet
 
 网络协议使用pbc版的protobuf
