@@ -1,29 +1,31 @@
 local skynet = require "skynet"
 local utils = require "utils"
 
-local max_client = 64
-
 skynet.start(function()
-	skynet.error("Server start")
+    skynet.error("Server start")
 
-	skynet.newservice("console")
-	skynet.newservice("debug_console",8000)
+    skynet.newservice("debug_console",skynet.getenv("debug_port"))
 
-	local watchdog = skynet.newservice("watchdog")
-	skynet.call(watchdog, "lua", "start", {
-		port = 8888,
-		maxclient = max_client,
-		nodelay = true,
-	})
-	skynet.error("Watchdog listen on", 8888)
 
-	local service = skynet.newservice("pbc")
-	
-	service = skynet.newservice("mongodb")
-	skynet.send(service, "lua", "init")
+    skynet.newservice("httpserver",9999,"httpagent",10)
 
-	service = skynet.newservice("hall")
-	skynet.call(service, "lua", "start")
+--[[    skynet.newservice("pbc")
 
-	skynet.exit()
+    local service = skynet.newservice("db")
+    skynet.send(service, "lua", "start",{
+        host = skynet.getenv("mongo_host"),
+        db_name = skynet.getenv("mongo_db")
+    })
+
+    service = skynet.newservice("hall")
+    skynet.call(service, "lua", "start")
+
+    local watchdog = skynet.newservice("watchdog")
+    skynet.call(watchdog, "lua", "start", {
+        port = tonumber(skynet.getenv("gate_port")),
+        maxclient = tonumber(skynet.getenv("gate_max_client")),
+        nodelay = true,
+    })
+]]--
+    skynet.exit()
 end)
